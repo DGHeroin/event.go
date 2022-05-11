@@ -4,7 +4,7 @@ type (
     Manager interface {
         Add(name string, listener Listener)
         Remove(name string, listener Listener)
-        Dispatch(name string, args interface{})
+        Dispatch(name string, args F)
     }
     manager struct {
         Storage    Storage
@@ -32,7 +32,10 @@ func (m *manager) Add(name string, listener Listener) {
 func (m *manager) Remove(name string, listener Listener) {
     m.Storage.Remove(name, listener)
 }
-func (m *manager) Dispatch(name string, args interface{}) {
+func (m *manager) Dispatch(name string, args F) {
+    // record
+    m.Recorder.TakeSnapShot(name, args)
+    // dispatch
     ss := m.Storage.Listeners(name)
-    m.Dispatcher.Dispatch(name, args, ss...)
+    m.Dispatcher.Dispatch(args, ss...)
 }

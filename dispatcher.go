@@ -2,12 +2,12 @@ package event
 
 type (
     Dispatcher interface {
-        Dispatch(name string, state interface{}, listeners ...Listener)
+        Dispatch(state F, listeners ...Listener)
     }
     dispatcher int
 )
 
-func (d *dispatcher) Dispatch(name string, state interface{}, listeners ...Listener) {
+func (d *dispatcher) Dispatch(state F, listeners ...Listener) {
     for _, s := range listeners {
         s.OnEvent(state)
     }
